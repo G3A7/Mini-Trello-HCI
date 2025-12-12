@@ -1,10 +1,8 @@
 import {
   ArrowLeft,
   ArrowRight,
-  GripHorizontal,
   GripVertical,
   Loader2,
-  Move,
   Trash2,
 } from "lucide-react";
 import { motion } from "motion/react";
