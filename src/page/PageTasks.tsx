@@ -4,7 +4,14 @@ import ColumnTask from "../components/ColumnTask";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useStoreProjects } from "@/store/use-store-projects";
-import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import {
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 export default function PageTasks() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -28,6 +35,21 @@ export default function PageTasks() {
     const newColumnAndStatus = over.id as string;
     changeStatus(taskId, newColumnAndStatus);
   };
+
+  const pointerSensor = useSensor(PointerSensor, {
+    activationConstraint: {
+      distance: 5, 
+    },
+  });
+
+  const touchSensor = useSensor(TouchSensor, {
+    activationConstraint: {
+      delay: 150, 
+      tolerance: 5,
+    },
+  });
+
+  const sensors = useSensors(pointerSensor, touchSensor);
 
   return (
     <div className="pt-8">
@@ -58,7 +80,7 @@ export default function PageTasks() {
         </Button>
       </div>
 
-      <DndContext onDragEnd={handledragend}>
+      <DndContext onDragEnd={handledragend} sensors={sensors}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 mt-5">
           <ColumnTask
             changeStatus={changeStatus}
